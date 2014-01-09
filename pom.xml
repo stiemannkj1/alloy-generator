@@ -57,13 +57,11 @@
 			<version>20131018</version>
 		</dependency>
 	</dependencies>
-	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<jdk.version>1.6</jdk.version>
 	</properties>
-
 	<build>
 		<sourceDirectory>${basedir}/generator/src</sourceDirectory>
 		<outputDirectory>build/classes</outputDirectory>
@@ -90,16 +88,15 @@
 						</goals>
 						<configuration>
 							<outputDirectory>${basedir}/build/classes/com/liferay/alloy/tools/builder/templates</outputDirectory>
-							<resources>          
+							<resources>
 								<resource>
 									<directory>${basedir}/generator/src/com/liferay/alloy/tools/builder/templates</directory>
 								</resource>
-							</resources>              
-						</configuration>            
+							</resources>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
 		</plugins>
 	</build>
-
 </project>
