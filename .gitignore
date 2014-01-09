@@ -5,5 +5,3 @@ build.*.properties
 bin/*
 build/*
 generator/classes/*
-
-target
