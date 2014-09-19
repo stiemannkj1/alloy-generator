@@ -39,9 +39,10 @@
 			</#if>
 			<name>${attribute.getSafeName()}</name>
 			<required>${attribute.isRequired()?string("true", "false")}</required>
-			<type>${attribute.getType()?xml}</type>
 			<#if attribute.getMethodSignature()??>
-			<method-signature><#compress>${attribute.getMethodSignature()}</#compress></method-signature>
+			<method-signature><#compress>${attribute.getMethodSignature()?xml}</#compress></method-signature>
+			<#else>
+			<type>${attribute.getType()?xml}</type>
 			</#if>
 		</attribute>
 		</#list>

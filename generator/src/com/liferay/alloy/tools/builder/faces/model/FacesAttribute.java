@@ -73,6 +73,12 @@ public class FacesAttribute extends Attribute {
 
 		String type = Convert.toString(
 			facesAttributeElement.elementText("type"), DEFAULT_TYPE);
+		_methodSignature = facesAttributeElement.elementText(
+			"method-signature");
+
+		if (_methodSignature != null && type.equals(DEFAULT_TYPE)) {
+			type = "javax.el.MethodExpression";
+		}
 
 		setType(type);
 
