@@ -1,13 +1,16 @@
 <#include "../base/init.ftl">
 <#include "../base/copyright.ftl">
 
-package ${packagePath}.${component.getUncamelizedName(BLANK)};
+package ${packagePath}.${component.getUncamelizedName(BLANK)}.internal;
 
 <#if component.isYui()>
 import javax.faces.application.ResourceDependencies;
 </#if>
 import javax.faces.application.ResourceDependency;
 import javax.faces.render.FacesRenderer;
+
+import ${packagePath}.${component.getUncamelizedName(BLANK)}.${component.getCamelizedName()};
+
 
 /**
 <#list component.getAuthors()?sort as author>

@@ -17,7 +17,7 @@ public class ${component.getCamelizedName()} extends ${component.getCamelizedNam
 
 	// Public Constants
 	public static final String COMPONENT_TYPE = "${packagePath}.${component.getUncamelizedName(BLANK)}.${component.getCamelizedName()}";
-	public static final String RENDERER_TYPE = "${packagePath}.${component.getUncamelizedName(BLANK)}.${component.getCamelizedName()}${RENDERER_CLASS_SUFFIX}";
+	public static final String RENDERER_TYPE = "${packagePath}.${component.getUncamelizedName(BLANK)}.internal.${component.getCamelizedName()}${RENDERER_CLASS_SUFFIX}";
 	public static final String STYLE_CLASS_NAME = "${namespace}-${component.getUncamelizedName()}";
 
 	public ${component.getCamelizedName()}() {
