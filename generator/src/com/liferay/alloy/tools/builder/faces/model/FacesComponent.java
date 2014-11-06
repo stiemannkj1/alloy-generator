@@ -70,6 +70,8 @@ public class FacesComponent extends Component {
 
 		super.initialize(facesComponentElement, defaultPackage);
 
+		_generateRenderer = Convert.toBoolean(
+			facesComponentElement.attributeValue("generateRenderer"), true);
 		_generateTaglibXML = Convert.toBoolean(
 			facesComponentElement.attributeValue("generateTaglibXML"), true);
 		_handlerClassOnly = Convert.toBoolean(
@@ -176,6 +178,14 @@ public class FacesComponent extends Component {
 
 		return attributes;
 	}
+	
+	public boolean isGenerateRenderer() {
+		return _generateRenderer;
+	}
+
+	public void setGenerateRenderer(boolean _generateRenderer) {
+		this._generateRenderer = _generateRenderer;
+	}
 
 	private static final String _DEFAULT_COMPONENT_PARENT_CLASS =
 		"javax.faces.component.UIComponentBase";
@@ -183,6 +193,7 @@ public class FacesComponent extends Component {
 	private static final String _DEFAULT_RENDERER_BASE_CLASS =
 		"javax.faces.render.Renderer";
 
+	private boolean _generateRenderer;
 	private boolean _generateTaglibXML;
 	private String _handlerClass;
 	private boolean _handlerClassOnly;

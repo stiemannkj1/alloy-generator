@@ -17,8 +17,10 @@ public class ${component.getCamelizedName()} extends ${component.getCamelizedNam
 
 	// Public Constants
 	public static final String COMPONENT_TYPE = "${packagePath}.${component.getUncamelizedName()}.${component.getCamelizedName()}";
+	<#if component.isGenerateRenderer()>
 	public static final String RENDERER_TYPE = "${packagePath}.${component.getUncamelizedName()}.internal.${component.getCamelizedName()}Renderer";
 	public static final String STYLE_CLASS_NAME = "${namespace}-${component.getUncamelizedName("-")}";
+	</#if>
 
 	public ${component.getCamelizedName()}() {
 		super();

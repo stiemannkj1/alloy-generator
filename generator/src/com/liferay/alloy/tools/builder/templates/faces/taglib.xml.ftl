@@ -26,7 +26,9 @@
 		<#else>
 		<component>
 			<component-type>${packagePath}.${component.getUncamelizedName()}.${component.getCamelizedName()}</component-type>
+			<#if component.isGenerateRenderer()>
 			<renderer-type>${packagePath}.${component.getUncamelizedName()}.internal.${component.getCamelizedName()}Renderer</renderer-type>
+			</#if>
 			<#if component.getHandlerClass()??>
 			<handler-class>${component.getHandlerClass()}</handler-class>
 			</#if>
