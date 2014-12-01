@@ -48,7 +48,7 @@ public class Attribute extends BaseModel {
 	public String getGetterMethodPrefix() {
 		String getterMethodPrefix = "get";
 
-		if (getJavaWrapperType().equalsIgnoreCase("Boolean")) {
+		if ("boolean".equals(_type)) {
 			getterMethodPrefix = "is";
 		}
 
