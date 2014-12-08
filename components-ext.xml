@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<components extends="./components.xml" namespace="aui">
+<components extends="./components.xml" namespace="aui" defaultSince="4.2.0" defaultYUIRendererParentClass="com.liferay.faces.alloy.render.internal.AlloyRendererBase">
 <!-- Example of how to add attribute: -->
 
 	<!-- <component name="Popover">

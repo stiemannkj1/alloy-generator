@@ -16,7 +16,6 @@ package com.liferay.alloy.tools.builder.faces.model;
 
 import com.liferay.alloy.tools.model.Attribute;
 import com.liferay.alloy.tools.model.Component;
-import com.liferay.alloy.util.PropsUtil;
 import com.liferay.alloy.util.StringUtil;
 
 import java.util.ArrayList;
@@ -61,9 +60,8 @@ public class FacesComponent extends Component {
 		return _yuiName;
 	}
 
-	@Override
 	public void initialize(
-		Element facesComponentElement, String defaultPackage) {
+		Element facesComponentElement, String defaultPackage, String defaultYUIRendererParentClass, String defaultSince) {
 
 		super.initialize(facesComponentElement, defaultPackage);
 
@@ -71,6 +69,8 @@ public class FacesComponent extends Component {
 			facesComponentElement.attributeValue("generateTaglibXML"), true);
 		_handlerClassOnly = Convert.toBoolean(
 			facesComponentElement.attributeValue("handlerClassOnly"), false);
+		_since = Convert.toString(
+			facesComponentElement.attributeValue("since"), defaultSince);
 		_styleable = Convert.toBoolean(
 			facesComponentElement.attributeValue("styleable"), true);
 		_handlerClass = Convert.toString(
@@ -88,15 +88,15 @@ public class FacesComponent extends Component {
 
 		String parentClass = Convert.toString(
 			facesComponentElement.attributeValue("parentClass"),
-			_COMPONENT_DEFAULT_PARENT_CLASS);
+			_DEFAULT_COMPONENT_PARENT_CLASS);
 		setParentClass(parentClass);
 
 		String defaultRendererParentClass = _DEFAULT_RENDERER_BASE_CLASS;
 
-		if (isYui() && (_DEFAULT_ALLOY_RENDERER_PARENT_CLASS != null) &&
-			(_DEFAULT_ALLOY_RENDERER_PARENT_CLASS.length() > 0)) {
+		if (isYui() && (defaultYUIRendererParentClass != null) &&
+			(defaultYUIRendererParentClass.length() > 0)) {
 
-			defaultRendererParentClass = _DEFAULT_ALLOY_RENDERER_PARENT_CLASS;
+			defaultRendererParentClass = defaultYUIRendererParentClass;
 		}
 
 		_rendererParentClass = Convert.toString(
@@ -168,12 +168,16 @@ public class FacesComponent extends Component {
 		return attributes;
 	}
 
-	private static final String _COMPONENT_DEFAULT_PARENT_CLASS =
-		PropsUtil.getString("builder.faces.component.default.parent.class");
+	public String getSince() {
+		return _since;
+	}
 
-	private static final String _DEFAULT_ALLOY_RENDERER_PARENT_CLASS =
-		PropsUtil.getString(
-			"builder.faces.default.alloy.renderer.parent.class");
+	public void setSince(String _since) {
+		this._since = _since;
+	}
+
+	private static final String _DEFAULT_COMPONENT_PARENT_CLASS =
+		"javax.faces.component.UIComponentBase";
 
 	private static final String _DEFAULT_RENDERER_BASE_CLASS =
 		"javax.faces.render.Renderer";
@@ -182,6 +186,7 @@ public class FacesComponent extends Component {
 	private String _handlerClass;
 	private boolean _handlerClassOnly;
 	private String _rendererParentClass;
+	private String _since;
 	private boolean _styleable;
 	private String _validatorId;
 	private boolean _yui;

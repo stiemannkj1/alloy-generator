@@ -46,7 +46,7 @@
 		</attribute>
 		</#list>
 		<tag-extension>
-			<vdldoc:since>${version}</vdldoc:since>
+			<vdldoc:since>${component.getSince()}</vdldoc:since>
 		</tag-extension>
 	</tag>
 </#list>
