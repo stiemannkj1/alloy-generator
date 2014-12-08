@@ -152,6 +152,12 @@ public abstract class BaseBuilder {
 
 				root.add(copy);
 			}
+
+			List<org.dom4j.Attribute> attributes = currentRoot.attributes();
+
+			for (org.dom4j.Attribute attribute : attributes) {
+				root.addAttribute(attribute.getName(), attribute.getValue());
+			}
 		}
 
 		doc.add(root.createCopy());
