@@ -330,13 +330,13 @@ public class FacesBuilder extends BaseBuilder {
 
 	private static final String _BASE_CLASS_SUFFIX = "Base";
 
+	private static final String _NAMESPACE = PropsUtil.getString(
+		"builder.faces.taglib.xml.namespace", "alloy");
+
 	private static final String _COMPONENTS_PACKAGE =
 		"com.liferay.faces." + _NAMESPACE + ".component";
 
 	private static final String _JAVA_EXT = ".java";
-
-	private static final String _NAMESPACE = PropsUtil.getString(
-		"builder.faces.taglib.xml.namespace", "alloy");
 
 	private static final String _RENDERER_CLASS_SUFFIX = "Renderer";
 

@@ -33,7 +33,7 @@ public class FacesComponent extends Component {
 		return _handlerClass;
 	}
 
-	public String getRendererBaseClass() {
+	public String getRendererParentClass() {
 		if (_rendererParentClass.contains("<")) {
 			return _rendererParentClass.substring(
 				0, _rendererParentClass.indexOf("<"));
@@ -45,7 +45,7 @@ public class FacesComponent extends Component {
 
 	public String getUnqualifiedRendererParentClass() {
 		return _rendererParentClass.substring(
-			_rendererParentClass.lastIndexOf(StringPool.DOT) + 1);
+			getRendererParentClass().lastIndexOf(StringPool.DOT) + 1);
 	}
 
 	public String getValidatorId() {
