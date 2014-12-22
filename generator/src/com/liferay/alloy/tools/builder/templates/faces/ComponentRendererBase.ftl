@@ -28,7 +28,7 @@ import ${component.getRendererParentClass()};
 </#list>
  */
 @Generated(value = "com.liferay.alloy.tools.builder.FacesBuilder")
-public abstract class ${component.getCamelizedName()}${RENDERER_BASE_CLASS_SUFFIX} extends ${component.getUnqualifiedRendererParentClass()} {
+public abstract class ${component.getCamelizedName()}RendererBase extends ${component.getUnqualifiedRendererParentClass()} {
 	<#assign first = true>
 	<#list component.getAttributes()?sort_by("yuiName") as attribute>
 	<#if attribute.isGenerateJava()>

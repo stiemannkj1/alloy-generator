@@ -108,8 +108,6 @@ public abstract class BaseBuilder {
 		return _copyrightYear;
 	}
 
-	public abstract String getTemplatesDir();
-
 	protected List<Component> getAllComponents() throws Exception {
 		DocumentFactory factory = SAXReaderUtil.getDocumentFactory();
 

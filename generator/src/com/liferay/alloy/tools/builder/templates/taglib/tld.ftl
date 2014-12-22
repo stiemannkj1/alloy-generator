@@ -11,7 +11,7 @@
 	<uri>${uri}</uri>
 <#list components as component>
 	<tag>
-		<name>${component.getUncamelizedName()}</name>
+		<name>${component.getUncamelizedName("-")}</name>
 		<tag-class>${packagePath}.${component.getPackage()}.${component.getClassName()}</tag-class>
 		<body-content>JSP</body-content>
 		<#list component.getAttributesAndEvents() as attribute>

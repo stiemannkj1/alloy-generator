@@ -30,37 +30,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-import jodd.util.StringPool;
-
 import org.dom4j.Document;
 import org.dom4j.Element;
 public class FacesBuilder extends BaseBuilder {
 
 	public static void main(String[] args) throws Exception {
-		String baseOutputDir = PropsUtil.getString("builder.faces.output.dir");
-		String taglibXMLOutputDir = PropsUtil.getString(
-			"builder.faces.taglib.xml.output.dir");
-		String version = PropsUtil.getString("builder.faces.version");
-
-		new FacesBuilder(baseOutputDir, taglibXMLOutputDir, version);
-	}
-
-	public FacesBuilder(
-			String baseOutputDir, String taglibXMLOutputDir, String version)
-		throws Exception {
-
-		_baseOutputDir = baseOutputDir;
-		_taglibXMLOutputDir = taglibXMLOutputDir;
-
-		_tplComponent = getTemplatesDir() + "component.ftl";
-		_tplComponentBase = getTemplatesDir() + "component_base.ftl";
-		_tplRenderer = getTemplatesDir() + "renderer.ftl";
-		_tplRendererBase = getTemplatesDir() + "renderer_base.ftl";
-		_tplTaglibsXML = getTemplatesDir() + "taglibs.ftl";
-
-		_version = version;
-
-		build();
+		FacesBuilder facesBuilder = new FacesBuilder();
+		facesBuilder.build();
 	}
 
 	@Override
@@ -71,21 +47,17 @@ public class FacesBuilder extends BaseBuilder {
 		Map<String, Object> context = getDefaultTemplateContext();
 		context.put("namespace", _NAMESPACE);
 		context.put("packagePath", _COMPONENTS_PACKAGE);
-		context.put("BASE_CLASS_SUFFIX", _BASE_CLASS_SUFFIX);
-		context.put("RENDERER_CLASS_SUFFIX", _RENDERER_CLASS_SUFFIX);
-		context.put(
-			"RENDERER_BASE_CLASS_SUFFIX",
-			_RENDERER_CLASS_SUFFIX + _BASE_CLASS_SUFFIX);
 
 		while (iterator.hasNext()) {
 			FacesComponent facesComponent = (FacesComponent)iterator.next();
 
 			if (facesComponent.isGenerateJava()) {
 				context.put("component", facesComponent);
-				_buildComponent(facesComponent, context);
-				_buildComponentBase(facesComponent, context);
-				_buildRenderer(facesComponent, context);
-				_buildRendererBase(facesComponent, context);
+
+				_buildComponentFile(facesComponent, context);
+				_buildComponentFile(facesComponent, context, "Base");
+				_buildComponentFile(facesComponent, context, "Renderer");
+				_buildComponentFile(facesComponent, context, "RendererBase");
 
 				context.remove("component");
 			}
@@ -95,28 +67,10 @@ public class FacesBuilder extends BaseBuilder {
 			}
 		}
 
-		_buildTaglibsXML(components, context);
+		_buildTaglibXMLFile(components, context);
 
 		System.out.println(
 			"Finished looping over " + components.size() + " components.");
-	}
-
-	@Override
-	public String getTemplatesDir() {
-		return _TEMPLATES_DIR;
-	}
-
-	protected String getComponentOutputDir(Component component) {
-		StringBuilder sb = new StringBuilder(6);
-
-		sb.append(_baseOutputDir);
-		sb.append(StringPool.SLASH);
-		sb.append(_COMPONENTS_PACKAGE.replaceAll("\\.", StringPool.SLASH));
-		sb.append(StringPool.SLASH);
-		sb.append(component.getUncamelizedName(StringPool.EMPTY));
-		sb.append(StringPool.SLASH);
-
-		return sb.toString();
 	}
 
 	@Override
@@ -125,13 +79,11 @@ public class FacesBuilder extends BaseBuilder {
 
 		Map<String, Component> facesComponentsMap =
 			new HashMap<String, Component>();
-
-		String defaultPackage = root.attributeValue("short-name");
 		List<Element> allComponentNodes = root.elements("component");
 
 		for (Element node : allComponentNodes) {
 			FacesComponent facesComponent = new FacesComponent();
-			facesComponent.initialize(node, defaultPackage);
+			facesComponent.initialize(node, _COMPONENTS_PACKAGE);
 			facesComponentsMap.put(facesComponent.getName(), facesComponent);
 		}
 
@@ -144,30 +96,6 @@ public class FacesBuilder extends BaseBuilder {
 		}
 
 		return facesComponents;
-	}
-
-	@Override
-	protected Map<String, Object> getDefaultTemplateContext() {
-		Map<String, Object> context = super.getDefaultTemplateContext();
-
-		context.put("packagePath", _COMPONENTS_PACKAGE);
-		context.put("version", _version);
-
-		return context;
-	}
-
-	protected String getRendererOutputDir(Component component) {
-		return getComponentOutputDir(
-			component).concat("internal").concat(StringPool.SLASH);
-	}
-
-	protected String getTaglibsXMLOutputDir() {
-		StringBuilder sb = new StringBuilder(2);
-
-		sb.append(_taglibXMLOutputDir);
-		sb.append(StringPool.SLASH);
-
-		return sb.toString();
 	}
 
 	protected void recursivelyAddExtensionAttributesAndEvents(
@@ -216,88 +144,52 @@ public class FacesBuilder extends BaseBuilder {
 		}
 	}
 
-	private void _buildComponent(
+	@Override
+	protected String processTemplate(String name, Map<String, Object> context)
+		throws Exception {
+
+		return super.processTemplate(_TEMPLATES_DIR.concat(name), context);
+	}
+
+	private void _buildComponentFile(
 			FacesComponent facesComponent, Map<String, Object> context)
 		throws Exception {
 
-		String path = getComponentOutputDir(facesComponent);
+		_buildComponentFile(facesComponent, context, "");
+	}
 
-		String componentContent = processTemplate(_tplComponent, context);
+	private void _buildComponentFile(
+			FacesComponent facesComponent, Map<String, Object> context,
+			String suffix)
+		throws Exception {
 
-		File componentFile = new File(
-			path.concat(facesComponent.getCamelizedName().concat(_JAVA_EXT)));
+		String templateFilePath = "Component" + suffix + ".ftl";
+		String componentContent = processTemplate(templateFilePath, context);
 
+		StringBuilder sb = new StringBuilder(5);
+		sb.append(_COMPONENT_DIR);
+		sb.append("/");
+		sb.append(facesComponent.getUncamelizedName(""));
+		sb.append("/");
+
+		if (suffix.contains("Renderer")) {
+			sb.append("internal/");
+		}
+
+		sb.append(facesComponent.getCamelizedName());
+		sb.append(suffix);
+		sb.append(".java");
+
+		File componentFile = new File(sb.toString());
 		writeFile(componentFile, componentContent, false);
 	}
 
-	private void _buildComponentBase(
-			FacesComponent facesComponent, Map<String, Object> context)
-		throws Exception {
-
-		String path = getComponentOutputDir(facesComponent);
-
-		String componentBaseContent = processTemplate(
-			_tplComponentBase, context);
-
-		StringBuilder fileNameSb = new StringBuilder(4);
-
-		fileNameSb.append(path);
-		fileNameSb.append(facesComponent.getCamelizedName());
-		fileNameSb.append(_BASE_CLASS_SUFFIX);
-		fileNameSb.append(_JAVA_EXT);
-
-		File componentBaseFile = new File(fileNameSb.toString());
-
-		writeFile(componentBaseFile, componentBaseContent);
-	}
-
-	private void _buildRenderer(
-			FacesComponent facesComponent, Map<String, Object> context)
-		throws Exception {
-
-		String path = getRendererOutputDir(facesComponent);
-
-		String rendererContent = processTemplate(_tplRenderer, context);
-
-		StringBuilder fileNameSb = new StringBuilder(4);
-
-		fileNameSb.append(path);
-		fileNameSb.append(facesComponent.getCamelizedName());
-		fileNameSb.append(_RENDERER_CLASS_SUFFIX);
-		fileNameSb.append(_JAVA_EXT);
-
-		File rendererFile = new File(fileNameSb.toString());
-
-		writeFile(rendererFile, rendererContent, false);
-	}
-
-	private void _buildRendererBase(
-			FacesComponent facesComponent, Map<String, Object> context)
-		throws Exception {
-
-		String path = getRendererOutputDir(facesComponent);
-
-		String rendererBaseContent = processTemplate(_tplRendererBase, context);
-
-		StringBuilder fileNameSb = new StringBuilder(5);
-
-		fileNameSb.append(path);
-		fileNameSb.append(facesComponent.getCamelizedName());
-		fileNameSb.append(_RENDERER_CLASS_SUFFIX);
-		fileNameSb.append(_BASE_CLASS_SUFFIX);
-		fileNameSb.append(_JAVA_EXT);
-
-		File rendererBaseFile = new File(fileNameSb.toString());
-
-		writeFile(rendererBaseFile, rendererBaseContent);
-	}
-
-	private void _buildTaglibsXML(
+	private void _buildTaglibXMLFile(
 			List<Component> components, Map<String, Object> context)
 		throws Exception {
 
 		context.put("components", components);
-		context.put("version", _version);
+		context.put("version", PropsUtil.getString("builder.faces.version"));
 
 		for (Document doc : getComponentDefinitionDocs()) {
 			Element root = doc.getRootElement();
@@ -318,17 +210,22 @@ public class FacesBuilder extends BaseBuilder {
 				context.put("extensionElements", extensionElements);
 			}
 
-			String rendererContent = processTemplate(_tplTaglibsXML, context);
+			String taglibXMLContent = processTemplate(
+				"taglib.xml.ftl", context);
 
-			String path = getTaglibsXMLOutputDir();
+			StringBuilder sb = new StringBuilder(4);
+			sb.append(_TAGLIB_XML_OUTPUT_DIR);
+			sb.append("/");
+			sb.append(_NAMESPACE);
+			sb.append(".taglib.xml");
 
-			File rendererFile = new File(path.concat(_NAMESPACE).concat(
-				_TAGLIB_XML_EXT));
-			writeFile(rendererFile, rendererContent, true);
+			File taglibXMLFile = new File(sb.toString());
+			writeFile(taglibXMLFile, taglibXMLContent, true);
 		}
 	}
 
-	private static final String _BASE_CLASS_SUFFIX = "Base";
+	private static final String _BASE_OUTPUT_DIR = PropsUtil.getString(
+		"builder.faces.output.dir");
 
 	private static final String _NAMESPACE = PropsUtil.getString(
 		"builder.faces.taglib.xml.namespace", "alloy");
@@ -336,22 +233,13 @@ public class FacesBuilder extends BaseBuilder {
 	private static final String _COMPONENTS_PACKAGE =
 		"com.liferay.faces." + _NAMESPACE + ".component";
 
-	private static final String _JAVA_EXT = ".java";
+	private static final String _COMPONENT_DIR =
+		_BASE_OUTPUT_DIR + "/" + _COMPONENTS_PACKAGE.replaceAll("\\.", "/");
 
-	private static final String _RENDERER_CLASS_SUFFIX = "Renderer";
-
-	private static final String _TAGLIB_XML_EXT = ".taglib.xml";
+	private static final String _TAGLIB_XML_OUTPUT_DIR = PropsUtil.getString(
+		"builder.faces.taglib.xml.output.dir");
 
 	private static final String _TEMPLATES_DIR =
 		"com/liferay/alloy/tools/builder/templates/faces/";
-
-	private String _baseOutputDir;
-	private String _taglibXMLOutputDir;
-	private String _tplComponent;
-	private String _tplComponentBase;
-	private String _tplRenderer;
-	private String _tplRendererBase;
-	private String _tplTaglibsXML;
-	private String _version;
 
 }

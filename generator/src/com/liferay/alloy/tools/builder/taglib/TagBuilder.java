@@ -74,13 +74,13 @@ public class TagBuilder extends BaseBuilder {
 		_jspDir = jspDir;
 		_tldDir = tldDir;
 
-		_tplCommonInitJsp = getTemplatesDir() + "common_init_jsp.ftl";
-		_tplInitJsp = getTemplatesDir() + "init_jsp.ftl";
-		_tplJsp = getTemplatesDir() + "jsp.ftl";
-		_tplStartJsp = getTemplatesDir() + "start_jsp.ftl";
-		_tplTag = getTemplatesDir() + "tag.ftl";
-		_tplTagBase = getTemplatesDir() + "tag_base.ftl";
-		_tplTld = getTemplatesDir() + "tld.ftl";
+		_tplCommonInitJsp = _TEMPLATES_DIR + "common_init_jsp.ftl";
+		_tplInitJsp = _TEMPLATES_DIR + "init_jsp.ftl";
+		_tplJsp = _TEMPLATES_DIR + "jsp.ftl";
+		_tplStartJsp = _TEMPLATES_DIR + "start_jsp.ftl";
+		_tplTag = _TEMPLATES_DIR + "tag.ftl";
+		_tplTagBase = _TEMPLATES_DIR + "tag_base.ftl";
+		_tplTld = _TEMPLATES_DIR + "tld.ftl";
 
 		build();
 	}
@@ -107,11 +107,6 @@ public class TagBuilder extends BaseBuilder {
 
 		System.out.println(
 			"Finished looping over " + components.size() + " components.");
-	}
-
-	@Override
-	public String getTemplatesDir() {
-		return _TEMPLATES_DIR;
 	}
 
 	@Override

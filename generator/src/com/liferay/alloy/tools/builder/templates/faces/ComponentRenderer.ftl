@@ -31,6 +31,6 @@ import ${packagePath}.${component.getUncamelizedName(BLANK)}.${component.getCame
 @ResourceDependency(library = "liferay-faces-alloy", name = "liferay.js")
 </#if>
 //J+
-public class ${component.getCamelizedName()}${RENDERER_CLASS_SUFFIX} extends ${component.getCamelizedName()}${RENDERER_BASE_CLASS_SUFFIX} {
+public class ${component.getCamelizedName()}Renderer extends ${component.getCamelizedName()}RendererBase {
 	// Initial Generation
 }

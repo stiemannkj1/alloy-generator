@@ -44,7 +44,7 @@ public class Component extends BaseModel {
 
 		sb.append(_package);
 		sb.append(StringPool.COLON);
-		sb.append(getUncamelizedName());
+		sb.append(getUncamelizedName("-"));
 		sb.append(StringPool.COLON);
 
 		return sb.toString().toLowerCase();
@@ -122,13 +122,15 @@ public class Component extends BaseModel {
 	}
 
 	public String getUncamelizedName() {
-		String name = getName().replaceAll("\\.", StringPool.DASH);
-
-		return StringUtil.fromCamelCase(name, StringPool.DASH.charAt(0));
+		return getUncamelizedName("");
 	}
 
 	public String getUncamelizedName(String delimiter) {
-		return getUncamelizedName().replaceAll("\\-", delimiter);
+		final String PLACEHOLDER = "$";
+		String name = getName().replace(".", PLACEHOLDER);
+		name = StringUtil.fromCamelCase(name, PLACEHOLDER.charAt(0));
+
+		return name.replace(PLACEHOLDER, delimiter);
 	}
 
 	public String getUncapitalizedName() {
