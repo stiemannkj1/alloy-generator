@@ -7,7 +7,7 @@
 
 </#compress>
 
-package ${packagePath}.${component.getUncamelizedName(BLANK)};
+package ${packagePath}.${component.getUncamelizedName()};
 //J-
 
 import javax.annotation.Generated;

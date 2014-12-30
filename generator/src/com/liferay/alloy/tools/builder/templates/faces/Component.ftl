@@ -1,7 +1,7 @@
 <#include "../base/init.ftl">
 <#include "../base/copyright.ftl">
 
-package ${packagePath}.${component.getUncamelizedName(BLANK)};
+package ${packagePath}.${component.getUncamelizedName()};
 
 import javax.faces.component.FacesComponent;
 
@@ -16,9 +16,9 @@ import com.liferay.faces.util.component.ComponentUtil;
 public class ${component.getCamelizedName()} extends ${component.getCamelizedName()}Base {
 
 	// Public Constants
-	public static final String COMPONENT_TYPE = "${packagePath}.${component.getUncamelizedName(BLANK)}.${component.getCamelizedName()}";
-	public static final String RENDERER_TYPE = "${packagePath}.${component.getUncamelizedName(BLANK)}.internal.${component.getCamelizedName()}Renderer";
-	public static final String STYLE_CLASS_NAME = "${namespace}-${component.getUncamelizedName()}";
+	public static final String COMPONENT_TYPE = "${packagePath}.${component.getUncamelizedName()}.${component.getCamelizedName()}";
+	public static final String RENDERER_TYPE = "${packagePath}.${component.getUncamelizedName()}.internal.${component.getCamelizedName()}Renderer";
+	public static final String STYLE_CLASS_NAME = "${namespace}-${component.getUncamelizedName("-")}";
 
 	public ${component.getCamelizedName()}() {
 		super();

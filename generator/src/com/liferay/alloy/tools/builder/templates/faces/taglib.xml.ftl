@@ -25,8 +25,8 @@ http://java.sun.com/xml/ns/javaee/web-facelettaglibrary_2_0.xsd http://vdldoc.or
 		<handler-class>${component.getHandlerClass()}</handler-class>
 		<#else>
 		<component>
-			<component-type>${packagePath}.${component.getUncamelizedName(BLANK)}.${component.getCamelizedName()}</component-type>
-			<renderer-type>${packagePath}.${component.getUncamelizedName(BLANK)}.internal.${component.getCamelizedName()}Renderer</renderer-type>
+			<component-type>${packagePath}.${component.getUncamelizedName()}.${component.getCamelizedName()}</component-type>
+			<renderer-type>${packagePath}.${component.getUncamelizedName()}.internal.${component.getCamelizedName()}Renderer</renderer-type>
 			<#if component.getHandlerClass()??>
 			<handler-class>${component.getHandlerClass()}</handler-class>
 			</#if>

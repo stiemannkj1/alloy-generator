@@ -1,7 +1,7 @@
 <#include "../base/init.ftl">
 <#include "../base/copyright.ftl">
 
-package ${packagePath}.${component.getUncamelizedName(BLANK)}.internal;
+package ${packagePath}.${component.getUncamelizedName()}.internal;
 //J-
 
 <#if component.isYui()>
@@ -16,7 +16,7 @@ import javax.faces.context.ResponseWriter;
 </#if>
 
 <#if component.isYui()>
-import ${packagePath}.${component.getUncamelizedName(BLANK)}.${component.getCamelizedName()};
+import ${packagePath}.${component.getUncamelizedName()}.${component.getCamelizedName()};
 </#if>
 
 import ${component.getRendererParentClass()};
