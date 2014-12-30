@@ -181,7 +181,7 @@ public class FacesBuilder extends BaseBuilder {
 		sb.append(".java");
 
 		File componentFile = new File(sb.toString());
-		writeFile(componentFile, componentContent, false);
+		writeFile(componentFile, componentContent, suffix.contains("Base"));
 	}
 
 	private void _buildTaglibXMLFile(
