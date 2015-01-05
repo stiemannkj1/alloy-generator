@@ -96,7 +96,7 @@ public abstract class BaseBuilder {
 
 	public String getCopyrightYear() {
 		if (_copyrightYear == null) {
-			_copyrightYear = System.getProperty("builder.copyright.year");
+			_copyrightYear = PropsUtil.getString("builder.copyright.year");
 
 			if (StringUtil.isBlank(_copyrightYear)) {
 				Calendar calendar = Calendar.getInstance();
