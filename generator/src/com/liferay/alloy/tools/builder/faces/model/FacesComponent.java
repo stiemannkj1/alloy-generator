@@ -42,6 +42,10 @@ public class FacesComponent extends Component {
 		}
 	}
 
+	public String getSince() {
+		return _since;
+	}
+
 	public String getUnqualifiedRendererParentClass() {
 		return _rendererParentClass.substring(
 			getRendererParentClass().lastIndexOf(StringPool.DOT) + 1);
@@ -61,7 +65,8 @@ public class FacesComponent extends Component {
 	}
 
 	public void initialize(
-		Element facesComponentElement, String defaultPackage, String defaultYUIRendererParentClass, String defaultSince) {
+		Element facesComponentElement, String defaultPackage,
+		String defaultYUIRendererParentClass, String defaultSince) {
 
 		super.initialize(facesComponentElement, defaultPackage);
 
@@ -136,6 +141,10 @@ public class FacesComponent extends Component {
 		_rendererParentClass = rendererParentClass;
 	}
 
+	public void setSince(String _since) {
+		this._since = _since;
+	}
+
 	public void setStyleable(boolean _styleable) {
 		this._styleable = _styleable;
 	}
@@ -166,14 +175,6 @@ public class FacesComponent extends Component {
 		}
 
 		return attributes;
-	}
-
-	public String getSince() {
-		return _since;
-	}
-
-	public void setSince(String _since) {
-		this._since = _since;
 	}
 
 	private static final String _DEFAULT_COMPONENT_PARENT_CLASS =

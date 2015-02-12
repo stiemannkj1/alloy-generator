@@ -81,13 +81,16 @@ public class FacesBuilder extends BaseBuilder {
 		Map<String, Component> facesComponentsMap =
 			new HashMap<String, Component>();
 
-		String defaultYUIRendererParentClass = root.attributeValue("defaultYUIRendererParentClass");
+		String defaultYUIRendererParentClass = root.attributeValue(
+			"defaultYUIRendererParentClass");
 		String defaultSince = root.attributeValue("defaultSince");
 		List<Element> allComponentNodes = root.elements("component");
 
 		for (Element node : allComponentNodes) {
 			FacesComponent facesComponent = new FacesComponent();
-			facesComponent.initialize(node, _COMPONENTS_PACKAGE, defaultYUIRendererParentClass, defaultSince);
+			facesComponent.initialize(
+				node, _COMPONENTS_PACKAGE, defaultYUIRendererParentClass,
+				defaultSince);
 			facesComponentsMap.put(facesComponent.getName(), facesComponent);
 		}
 
@@ -245,4 +248,5 @@ public class FacesBuilder extends BaseBuilder {
 
 	private static final String _TEMPLATES_DIR =
 		"com/liferay/alloy/tools/builder/templates/faces/";
+
 }
