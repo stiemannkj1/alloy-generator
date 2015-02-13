@@ -173,10 +173,17 @@ public class FacesBuilder extends BaseBuilder {
 		String templateFilePath = "Component" + suffix + ".ftl";
 		String componentContent = processTemplate(templateFilePath, context);
 
-		StringBuilder sb = new StringBuilder(5);
-		sb.append(_COMPONENT_DIR);
+		StringBuilder sb = new StringBuilder(8);
+
+		if (suffix.contains("Renderer")) {
+			sb.append(_COMPONENT_IMPL_DIR);
+		}
+		else {
+			sb.append(_COMPONENT_API_DIR);
+		}
+
 		sb.append("/");
-		sb.append(facesComponent.getUncamelizedName(""));
+		sb.append(facesComponent.getUncamelizedName());
 		sb.append("/");
 
 		if (suffix.contains("Renderer")) {
@@ -231,8 +238,11 @@ public class FacesBuilder extends BaseBuilder {
 		}
 	}
 
-	private static final String _BASE_OUTPUT_DIR = PropsUtil.getString(
-		"builder.faces.output.dir");
+	private static final String _BASE_API_OUTPUT_DIR = PropsUtil.getString(
+		"builder.faces.api.output.dir");
+
+	private static final String _BASE_IMPL_OUTPUT_DIR = PropsUtil.getString(
+		"builder.faces.impl.output.dir");
 
 	private static final String _NAMESPACE = PropsUtil.getString(
 		"builder.faces.taglib.xml.namespace", "alloy");
@@ -240,8 +250,11 @@ public class FacesBuilder extends BaseBuilder {
 	private static final String _COMPONENTS_PACKAGE =
 		"com.liferay.faces." + _NAMESPACE + ".component";
 
-	private static final String _COMPONENT_DIR =
-		_BASE_OUTPUT_DIR + "/" + _COMPONENTS_PACKAGE.replaceAll("\\.", "/");
+	private static final String _COMPONENT_API_DIR =
+		_BASE_API_OUTPUT_DIR + "/" + _COMPONENTS_PACKAGE.replaceAll("\\.", "/");
+
+	private static final String _COMPONENT_IMPL_DIR =
+		_BASE_IMPL_OUTPUT_DIR + "/" + _COMPONENTS_PACKAGE.replaceAll("\\.", "/");
 
 	private static final String _TAGLIB_XML_OUTPUT_DIR = PropsUtil.getString(
 		"builder.faces.taglib.xml.output.dir");
