@@ -59,7 +59,8 @@ public class FacesBuilder extends BaseBuilder {
 
 				if (facesComponent.isGenerateRenderer()) {
 					_buildComponentFile(facesComponent, context, "Renderer");
-					_buildComponentFile(facesComponent, context, "RendererBase");
+					_buildComponentFile(
+						facesComponent, context, "RendererBase");
 				}
 
 				context.remove("component");

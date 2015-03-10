@@ -111,6 +111,10 @@ public class FacesComponent extends Component {
 			defaultRendererParentClass);
 	}
 
+	public boolean isGenerateRenderer() {
+		return _generateRenderer;
+	}
+
 	public boolean isGenerateTaglibXML() {
 		return _generateTaglibXML;
 	}
@@ -125,6 +129,10 @@ public class FacesComponent extends Component {
 
 	public boolean isYui() {
 		return _yui;
+	}
+
+	public void setGenerateRenderer(boolean _generateRenderer) {
+		this._generateRenderer = _generateRenderer;
 	}
 
 	public void setGenerateTaglibXML(boolean _generateTaglibXML) {
@@ -177,14 +185,6 @@ public class FacesComponent extends Component {
 		}
 
 		return attributes;
-	}
-	
-	public boolean isGenerateRenderer() {
-		return _generateRenderer;
-	}
-
-	public void setGenerateRenderer(boolean _generateRenderer) {
-		this._generateRenderer = _generateRenderer;
 	}
 
 	private static final String _DEFAULT_COMPONENT_PARENT_CLASS =
