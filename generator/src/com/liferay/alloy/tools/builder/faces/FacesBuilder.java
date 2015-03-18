@@ -48,6 +48,8 @@ public class FacesBuilder extends BaseBuilder {
 		context.put("copyrightYear", getCopyrightYear());
 		context.put("namespace", _NAMESPACE);
 		context.put("packagePath", _COMPONENTS_PACKAGE);
+		context.put("facesMajorVersion", _FACES_MAJOR_VERSION);
+		context.put("facesMinorVersion", _FACES_MINOR_VERSION);
 
 		while (iterator.hasNext()) {
 			FacesComponent facesComponent = (FacesComponent)iterator.next();
@@ -258,6 +260,12 @@ public class FacesBuilder extends BaseBuilder {
 
 	private static final String _COMPONENT_IMPL_DIR =
 		_BASE_IMPL_OUTPUT_DIR + "/" + _COMPONENTS_PACKAGE.replaceAll("\\.", "/");
+
+	private static final String _FACES_VERSION = PropsUtil.getString("builder.faces.version");
+
+	private static final String _FACES_MAJOR_VERSION = _FACES_VERSION.split("[.]")[0];
+
+	private static final String _FACES_MINOR_VERSION = _FACES_VERSION.split("[.]")[1];
 
 	private static final String _TAGLIB_XML_OUTPUT_DIR = PropsUtil.getString(
 		"builder.faces.taglib.xml.output.dir");
