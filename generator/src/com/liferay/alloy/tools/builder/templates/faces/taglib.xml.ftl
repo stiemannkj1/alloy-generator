@@ -4,7 +4,7 @@
 	xmlns:vdldoc="http://vdldoc.org/vdldoc"
 	<#-- If the JSF version is 2.1, the Facelet Taglib version is 2.0. See -->
 	<#-- https://issues.liferay.com/browse/FACES-2109#commentauthor_590915_verbose for more details. -->
-	<#assign faceletTaglibVersion = facesMajorVersion + "." + facesMinorVersion>
+	<#assign faceletTaglibVersion = facesVersion>
 	<#if faceletTaglibVersion == "2.1">
 		<#assign faceletTaglibVersion = "2.0" />
 	</#if>
