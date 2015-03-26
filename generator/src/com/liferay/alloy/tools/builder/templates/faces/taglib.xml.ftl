@@ -2,8 +2,14 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <facelet-taglib xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:vdldoc="http://vdldoc.org/vdldoc"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facelettaglibrary_${facesMajorVersion}_${facesMinorVersion}.xsd http://vdldoc.org/vdldoc https://raw.githubusercontent.com/omnifaces/vdldoc/master/src/main/resources/org/omnifaces/vdldoc/resources/vdldoc.taglib.xml.xsd"
-	version="${facesMajorVersion}.${facesMinorVersion}">
+	<#-- If the JSF version is 2.1, the Facelet Taglib version is 2.0. See -->
+	<#-- https://issues.liferay.com/browse/FACES-2109#commentauthor_590915_verbose for more details. -->
+	<#assign faceletTaglibVersion = facesMajorVersion + "." + facesMinorVersion>
+	<#if faceletTaglibVersion == "2.1">
+		<#assign faceletTaglibVersion = "2.0" />
+	</#if>
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facelettaglibrary_${faceletTaglibVersion?replace(".", "_")}.xsd http://vdldoc.org/vdldoc https://raw.githubusercontent.com/omnifaces/vdldoc/master/src/main/resources/org/omnifaces/vdldoc/resources/vdldoc.taglib.xml.xsd"
+	version="${faceletTaglibVersion}">
 	<#if description??>
 	<description><![CDATA[${description}]]></description>
 	</#if>
