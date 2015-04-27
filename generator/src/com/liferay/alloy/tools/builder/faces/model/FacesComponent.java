@@ -171,7 +171,7 @@ public class FacesComponent extends Component {
 	protected List<Attribute> getAttributesFromElements(
 		List<Element> attributeElements) {
 
-		List<Attribute> attributes = new ArrayList<Attribute>();
+		List<Attribute> attributes = new ArrayList<>();
 
 		for (Element attributeElement : attributeElements) {
 			FacesAttribute facesAttribute = new FacesAttribute();

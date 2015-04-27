@@ -44,7 +44,7 @@ public class FacesBuilder extends BaseBuilder {
 		List<Component> components = getAllComponents();
 		Iterator<Component> iterator = components.iterator();
 
-		Map<String, Object> context = new HashMap<String, Object>();
+		Map<String, Object> context = new HashMap<>();
 		context.put("copyrightYear", getCopyrightYear());
 		context.put("namespace", _NAMESPACE);
 		context.put("packagePath", _COMPONENTS_PACKAGE);
@@ -82,8 +82,7 @@ public class FacesBuilder extends BaseBuilder {
 	protected List<Component> getComponents(Document doc) throws Exception {
 		Element root = doc.getRootElement();
 
-		Map<String, Component> facesComponentsMap =
-			new HashMap<String, Component>();
+		Map<String, Component> facesComponentsMap = new HashMap<>();
 
 		String defaultYUIRendererParentClass = root.attributeValue(
 			"defaultYUIRendererParentClass");
@@ -98,7 +97,7 @@ public class FacesBuilder extends BaseBuilder {
 			facesComponentsMap.put(facesComponent.getName(), facesComponent);
 		}
 
-		List<Component> facesComponents = new ArrayList<Component>(
+		List<Component> facesComponents = new ArrayList<>(
 			facesComponentsMap.values());
 
 		for (Component facesComponent : facesComponents) {
@@ -107,6 +106,13 @@ public class FacesBuilder extends BaseBuilder {
 		}
 
 		return facesComponents;
+	}
+
+	@Override
+	protected String processTemplate(String name, Map<String, Object> context)
+		throws Exception {
+
+		return super.processTemplate(_TEMPLATES_DIR.concat(name), context);
 	}
 
 	protected void recursivelyAddExtensionAttributesAndEvents(
@@ -153,13 +159,6 @@ public class FacesBuilder extends BaseBuilder {
 				}
 			}
 		}
-	}
-
-	@Override
-	protected String processTemplate(String name, Map<String, Object> context)
-		throws Exception {
-
-		return super.processTemplate(_TEMPLATES_DIR.concat(name), context);
 	}
 
 	private void _buildComponentFile(
@@ -248,20 +247,22 @@ public class FacesBuilder extends BaseBuilder {
 	private static final String _BASE_IMPL_OUTPUT_DIR = PropsUtil.getString(
 		"builder.faces.impl.output.dir");
 
-	private static final String _NAMESPACE = PropsUtil.getString(
-		"builder.faces.taglib.xml.namespace", "alloy");
-
-	private static final String _COMPONENTS_PACKAGE =
-		"com.liferay.faces." + _NAMESPACE + ".component";
-
 	private static final String _COMPONENT_API_DIR =
-		_BASE_API_OUTPUT_DIR + "/" + _COMPONENTS_PACKAGE.replaceAll("\\.", "/");
+		_BASE_API_OUTPUT_DIR + "/" +
+		FacesBuilder._COMPONENTS_PACKAGE.replaceAll("\\.", "/");
 
 	private static final String _COMPONENT_IMPL_DIR =
-		_BASE_IMPL_OUTPUT_DIR + "/" + _COMPONENTS_PACKAGE.replaceAll("\\.", "/");
+		_BASE_IMPL_OUTPUT_DIR + "/" +
+		FacesBuilder._COMPONENTS_PACKAGE.replaceAll("\\.", "/");
+
+	private static final String _COMPONENTS_PACKAGE =
+		"com.liferay.faces." + FacesBuilder._NAMESPACE + ".component";
 
 	private static final String _FACES_VERSION = PropsUtil.getString(
 		"builder.faces.version");
+
+	private static final String _NAMESPACE = PropsUtil.getString(
+		"builder.faces.taglib.xml.namespace", "alloy");
 
 	private static final String _TAGLIB_XML_OUTPUT_DIR = PropsUtil.getString(
 		"builder.faces.taglib.xml.output.dir");

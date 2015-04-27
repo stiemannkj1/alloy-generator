@@ -76,7 +76,7 @@ public class FacesAttribute extends Attribute {
 		_methodSignature = facesAttributeElement.elementText(
 			"method-signature");
 
-		if (_methodSignature != null && type.equals(DEFAULT_TYPE)) {
+		if ((_methodSignature != null) && type.equals(DEFAULT_TYPE)) {
 			type = "javax.el.MethodExpression";
 		}
 
