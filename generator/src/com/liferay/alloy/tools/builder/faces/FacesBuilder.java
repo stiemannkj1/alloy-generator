@@ -247,6 +247,12 @@ public class FacesBuilder extends BaseBuilder {
 	private static final String _BASE_IMPL_OUTPUT_DIR = PropsUtil.getString(
 		"builder.faces.impl.output.dir");
 
+	private static final String _NAMESPACE = PropsUtil.getString(
+		"builder.faces.taglib.xml.namespace", "alloy");
+
+	private static final String _COMPONENTS_PACKAGE =
+		"com.liferay.faces." + FacesBuilder._NAMESPACE + ".component";
+
 	private static final String _COMPONENT_API_DIR =
 		_BASE_API_OUTPUT_DIR + "/" +
 		FacesBuilder._COMPONENTS_PACKAGE.replaceAll("\\.", "/");
@@ -255,14 +261,8 @@ public class FacesBuilder extends BaseBuilder {
 		_BASE_IMPL_OUTPUT_DIR + "/" +
 		FacesBuilder._COMPONENTS_PACKAGE.replaceAll("\\.", "/");
 
-	private static final String _COMPONENTS_PACKAGE =
-		"com.liferay.faces." + FacesBuilder._NAMESPACE + ".component";
-
 	private static final String _FACES_VERSION = PropsUtil.getString(
 		"builder.faces.version");
-
-	private static final String _NAMESPACE = PropsUtil.getString(
-		"builder.faces.taglib.xml.namespace", "alloy");
 
 	private static final String _TAGLIB_XML_OUTPUT_DIR = PropsUtil.getString(
 		"builder.faces.taglib.xml.output.dir");
