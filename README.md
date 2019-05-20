@@ -1,5 +1,7 @@
 # Alloy Generator
 
+See also [*Component Development Checklist*](http://stiemannkj1.github.io/alloy-generator/component-development-checklist.html)
+
 A code generator developed to help generating taglibs and facelet custom components based on AlloyUI inline code documentaiton.
 
 ![Preview](http://s17.postimg.org/4a9rf4nq7/Screen_Shot_2013_12_23_at_8_32_57_PM.png)
