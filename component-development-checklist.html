@@ -1,0 +1,319 @@
+<html dir="ltr"><head>
+		<title>Component Development Checklist</title>
+	</head>
+	<body contenteditable="true">
+		<h1>Component Development Checklist</h1>
+		<div class="wiki-body">
+			<p><span style="color: red;"><b>Note:</b> The information below applies only to the <a class="externallink" rel="nofollow" href="https://github.com/stiemannkj1/alloy-generator">Alloy Generator</a>. Liferay Faces now uses the <a class="externallink" rel="nofollow" href="https://github.com/stiemannkj1/liferay-faces-generator">Liferay Faces Generator</a> which has a <a class="externallink" rel="nofollow" href="https://github.com/stiemannkj1/liferay-faces-generator/wiki">wiki</a> detailing how to use it and a <a class="externallink" rel="nofollow" href="https://github.com/stiemannkj1/liferay-faces-generator/blob/master/src/main/resources/templates/README.md">README.md</a> detailing how to improve it.</span></p>
+			<table id="toc">
+				<tbody>
+					<tr>
+						<td>
+							<ul>
+								<li><a href="#Component_Development_Checklist:"><span class="tocnumber">1</span> <span class="toctext">Component Development Checklist:</span></a></li>
+								<li><a href="#Common_Component_Development_Pitfalls"><span class="tocnumber">2</span> <span class="toctext">Common Component Development Pitfalls</span></a></li>
+								<li><a href="#Portal_Tag_XSL_Transformer"><span class="tocnumber">3</span> <span class="toctext">Portal Tag XSL Transformer</span></a></li>
+								<li><a href="#Getting_Started"><span class="tocnumber">4</span> <span class="toctext">Getting Started</span></a></li>
+								<li><a href="#About_the_Generator"><span class="tocnumber">5</span> <span class="toctext">About the Generator</span></a></li>
+								<li><a href="#components-ext.xml_explanation:"><span class="tocnumber">6</span> <span class="toctext">components-ext.xml explanation:</span></a>
+									<ul>
+										<li><a href="#The_.3Ccomponent.3E_element"><span class="tocnumber">6.1</span> <span class="toctext">The &lt;component&gt; element</span></a>
+											<ul>
+												<li><a href="#a_.3Ccomponent.3E_element_attributes"><span class="tocnumber">6.1.1</span> <span class="toctext">&lt;component&gt; element attributes</span></a></li>
+												<li><a href="#a_.3Ccomponent.3E_element_children"><span class="tocnumber">6.1.2</span> <span class="toctext">&lt;component&gt; element children</span></a></li>
+											</ul>
+										</li>
+										<li><a href="#The_.3Cattribute.3E_element"><span class="tocnumber">6.2</span> <span class="toctext">The &lt;attribute&gt; element</span></a>
+											<ul>
+												<li><a href="#a_.3Cattribute.3E_element_children"><span class="tocnumber">6.2.1</span> <span class="toctext">&lt;attribute&gt; element children</span></a></li>
+											</ul>
+										</li>
+										<li><a href="#Component_example:"><span class="tocnumber">6.3</span> <span class="toctext">Component example:</span></a></li>
+									</ul>
+								</li>
+							</ul>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<a name="Component_Development_Checklist:"></a>
+			<h2><span>Component Development Checklist:</span></h2>
+			<ul>
+				<li>Add your component to the <code>components-ext.xml</code> file. Make sure to specify a description, an appropriate parent class, any attributes that you would like to add, if necessary, a renderer parent class, if the component utilizes a YUI component, <code>yui="true"</code>, and (if the component's name is different than its YUI counterpart) a YUI name.</li>
+				<li>Determine what class your component renderer should extend. There are 6 options currently:
+					<ul>
+						<li>Renderer - Use if your component does NOT utilize JavaScript, and does NOT need to delegate to a JSF renderer. This is the default parent renderer for non-Alloy components. (Ex: Icon)</li>
+						<li>ClientComponentRendererBase - Use if your component utilizes (non-AlloyUI/YUI) JavaScript, but does NOT need to delegate to a JSF renderer.</li>
+						<li>DelegatingRendererBase - Use if your component does NOT utilize JavaScript, and does need to delegate to a JSF renderer. (Ex: InputText)</li>
+						<li>DelegatingClientComponentRendererBase - Use if your component utilizes (non-AlloyUI/YUI) JavaScript, and needs to delegate to a JSF renderer. (Ex: InputRichText)</li>
+						<li>AlloyRendererBase - Use if your component utilizes AlloyUI/YUI JavaScript, but does NOT need to delegate to a JSF renderer. (Ex: DatePicker)</li>
+						<li>DelegatingAlloyRendererBase - Use if your component utilizes AlloyUI/YUI JavaScript, and needs to delegate to a JSF renderer. (Ex: StarRating)</li>
+					</ul>
+				</li>
+				<li>Implement attributes. Be sure to implement HTML passthrough attributes and don't forget the appropriate <a class="externallink" rel="nofollow" href="http://www.w3.org/community/webed/wiki/HTML/Attributes/_Global">global HTML attributes</a> and <a class="externallink" rel="nofollow" href="http://www.w3.org/TR/html401/interact/scripts.html#events">JavaScript event attributes</a>.</li>
+				<li>Document all attributes.</li>
+				<li>Create and document use cases.
+					<ul>
+						<li>What needs a use case?
+							<ul>
+								<li>Guidelines
+									<ul>
+										<li>Use cases should be based on attributes.</li>
+										<li>The General use case should deal with <code>required</code> (where applicable), <code>requiredMessage</code> (only if parent does not have use case), <code>rendered</code>, and <code>value</code> (where applicable).</li>
+										<li>(If the parent component does not have <code>converter</code> use case or <code>converter</code> functions differently between the parent and child) There should be a Converter use case that deals with <code>converter</code> and <code>converterMessage</code> where applicable.</li>
+										<li>(If the parent component does not have <code>immediate</code> use case) There should be an Immediate use case that deals with <code>immediate</code> where applicable.</li>
+										<li>There should be an Instant Ajax use case that deals with <code>f:ajax</code> children where applicable.</li>
+										<li>(If the parent component does not have <code>validator</code> use case or <code>validator</code> functions differently between the parent and child) There should be a Validator use case that deals with <code>validator</code> and <code>validatorMessage</code> where applicable.</li>
+										<li>No need to create use cases for passthrough attributes.</li>
+										<li>Other use cases must be determined on based on the component's other important attributes.</li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</li>
+				<li>Implement Styleable in a reasonable way (make the styleClass attribute apply CSS classes). You will most likely want to use either the <a class="externallink" rel="nofollow" href="https://github.com/liferay/liferay-faces/blob/master/util/src/main/java/com/liferay/faces/util/component/ComponentUtil.java#L72">ComponentUtil.concatAllCssClasses(Styleable styleable, String classNames)</a> method or the <a class="externallink" rel="nofollow" href="https://github.com/liferay/liferay-faces/blob/master/util/src/main/java/com/liferay/faces/util/render/RendererUtil.java#L37">RendererUtil.encodeStyleable(ResponseWriter responseWriter, Styleable styleable, String classNames)</a> convenience methods.</li>
+			</ul>
+			<a name="Common_Component_Development_Pitfalls"></a>
+			<h2><span>Common Component Development Pitfalls</span></h2>
+			<ul>
+				<li>If your component is an alloy component and it does not appear on the page, you may be experiencing one of two issues:
+					<ul>
+						<li>You may need to call <code>encodeWidgetRender()</code> in your renderer.</li>
+						<li>Your component may be rendering, but the <code>zIndex</code> may be too low. The <code>zIndex</code> attribute determines the stack order of your component. You may need to set the <code>zIndex</code> to a high value to make your component visible in the portal. You may also want to check if there is an appropriate JavaScript constant which you can use as the default for your <code>zIndex</code> in <a class="externallink" rel="nofollow" href="https://github.com/liferay/liferay-faces/blob/master/alloy/src/main/resources/META-INF/resources/liferay-faces-alloy/liferay.js">liferay.js</a> (for example, <code>DatePicker</code> and <code>Popover</code> both utilize <code>Liferay.zIndex.TOOLTIP</code>). <b>Note:</b> if you use one of these default values, specify it in the renderer by checking that <code>zIndex</code> is <code>Integer.MIN_VALUE</code> and then writing it out using <code>encodeNonEscapedObject()</code>. That way, zIndex can stay an <code>Integer</code> and still have a default which is a string.</li>
+					</ul>
+				</li>
+			</ul>
+			<a name="Portal_Tag_XSL_Transformer"></a>
+			<h2><span>Portal Tag XSL Transformer</span></h2>
+			<p>The portal project includes a maven <code>transform</code> profile in order to transform the <code>liferay-ui.tld</code> into a first pass of components-ext xml and a first pass of the <code>copyNonFrameworkAttributes()</code> method. Execute this transform by <code>cd</code>ing into the <code>portal</code> directory and executing the following command:</p> <pre>mvn clean package -P transform
+			</pre>
+			<p>This will generate a <code>portal/target/transform/liferay-ui-ext.xml</code> file and a <code>portal/target/transform/liferay-ui.java</code> file. You can then copy the desired component from the <code>liferay-ui-ext.xml</code> to <code>portal/components-ext.xml</code> and generate to create your component. After that, you can grab the <code>copyNonFrameworkAttributes()</code> method for your component out of <code>liferay-ui.java</code> and copy it to your renderer.</p>
+			<p><b>Note:</b> The point of the transform is to quickly create a first pass at a portal component. It is still important to consider whether each attribute is appropriate for use in faces and potentially remove/add attributes where necessary.</p>
+			<hr>
+			<a name="Getting_Started"></a>
+			<h2><span>Getting Started</span></h2>
+			<p>To get started developing Liferay Faces components, you need to get the <a class="externallink" rel="nofollow" href="https://github.com/stiemannkj1/alloy-generator">Alloy Generator</a>. Follow these steps to build the generator from source:</p>
+			<ol>
+				<li>Clone the generator from stiemannkj1's repo: <pre>$ git clone https://github.com/stiemannkj1/alloy-generator.git
+					</pre></li>
+				<li>cd into the alloy-generator directory: <pre>$ cd alloy-generator/
+					</pre></li>
+				<li>Install the dependencies from the generator's <code>lib</code> directory into your local <code>.m2</code> repository. <pre>$ ./install.sh
+					</pre></li>
+				<li>Build and install the generator. <pre>$ mvn clean install
+					</pre></li>
+			</ol>
+			<p>Once you've installed the generator, you can generate the Liferay Faces component libraries from the <code>alloy</code>, <code>bridge-impl</code>, and <code>portal</code> directories with the following command:</p> <pre>$ mvn generate-sources -P generate-components
+			</pre>
+			<p><strong>Note:</strong> To build the <code>portlet</code> components, run the following command from the <code>bridge-impl</code> directory:</p> <pre>$ mvn generate-sources -P generate-components -Dcomponent.namespace=portlet -Dcomponent.namespace.URI=http://java.sun.com/portlet_2_0
+			</pre>
+			<a name="About_the_Generator"></a>
+			<h2><span>About the Generator</span></h2>
+			<p>The purpose of the generator is to deal with the boilerplate aspects of custom components such as:</p>
+			<ul>
+				<li>Getters/Setters</li>
+				<li>Rendering of basic YUI/AlloyUI attributes</li>
+				<li>Redundant documentation of attributes</li>
+				<li>Basic configuration</li>
+			</ul>
+			<p>Initial generation of a basic component will generate:</p>
+			<ul>
+				<li><code>Component</code> file
+					<ul>
+						<li>This file is only generated once. Edit this file to customize non-primitive default values for getters and setters or change validation for the component.</li>
+					</ul>
+				</li>
+				<li><code>ComponentBase</code> file
+					<ul>
+						<li>Do not edit this file. It will always be regenerated. This file houses the getters and setters for the component.</li>
+					</ul>
+				</li>
+				<li><code>Renderer</code> file
+					<ul>
+						<li>This file is only generated once. Edit this file to customize the rendering of the component.</li>
+					</ul>
+				</li>
+				<li><code>RendererBase</code> file
+					<ul>
+						<li>Do not edit this file. It will always be regenerated. This file houses constants for use with rendering and (if the component is an AlloyUI/YUI component,) Initial methods for rendering an AlloyUI/YUI JavaScript component and its attributes.</li>
+					</ul>
+				</li>
+				<li><code>taglib.xml</code> <code>tag</code> entry.
+					<ul>
+						<li>Do not edit the <code>taglib.xml</code>. It will always be regenerated.</li>
+					</ul>
+				</li>
+			</ul>
+			<p>These files are generated from the data in the <code>components-ext.xml</code> file located in the <code>alloy/</code>, <code>bridge-impl/</code>, and <code>portal/</code> directories. More details about the <code>components-ext.xml</code> can be found in the <b><code>components-ext.xml</code> explanation</b> section of this document.</p>
+			<a name="components-ext.xml_explanation:"></a>
+			<h2><span><code>components-ext.xml</code> explanation:</span></h2>
+			<p>To customize or override the way that components are generated, you can specify specific attributes and elements in the <code>components-ext.xml</code>.</p>
+			<a name="The_.3Ccomponent.3E_element"></a>
+			<h3><span>The <code>&lt;component&gt;</code> element</span></h3>
+			<p>The <code>&lt;component&gt;</code> element allows the developer to specify several attributes which will modify the generated code for that component.</p>
+			<a name="a_.3Ccomponent.3E_element_attributes"></a>
+			<h4><span><code>&lt;component&gt;</code> element attributes</span></h4>
+			<table border="1">
+				<tbody>
+					<tr>
+						<th scope="col">attribute</th>
+						<th>description</th>
+					</tr>
+					<tr>
+						<td><code>name</code></td>
+						<td>The name of the component. If the name is the same as an Alloy component, then the <code>components-ext.xml</code> xml will be merged with the xml generated from the component's json description. <b>Note:</b> This name should be a capitalized camel-cased version of the name that your tag will have.</td>
+					</tr>
+					<tr>
+						<td><code>extendsTags</code></td>
+						<td>The tag(s) which this component extends. This component will inherit only attributes from the extended tag(s). The component may or may not related to its parent tag(s) via Java inheritance. The value of this attribute must be a space separated list of the value of the extended tags' <code>name</code> attributes (if the component has a <code>preferredName</code>, then the value of this component must reflect the value of <code>preferredName</code> instead).</td>
+					</tr>
+					<tr>
+						<td><code>generateJava</code></td>
+						<td>Boolean flag indicating whether any java should be generated for the component. Defaults to true. Set this to false if your component would not benefit from any of the generated Java files, but you need documentation for the component to appear in the <code>taglib.xml</code></td>
+					</tr>
+					<tr>
+						<td><code>generateTaglibXML</code></td>
+						<td>Boolean flag indicating whether any xml should be generated for the component. Defaults to true. Set this to false if your component should not appear in the <code>taglib.xml</code>.</td>
+					</tr>
+					<tr>
+						<td><code>handlerClass</code></td>
+						<td>The tag handler class associated with this component. The value of this attribute will be generated into the <code>&lt;handler-class&gt;</code> element for the <code>&lt;tag&gt;</code> in the <code>taglib.xml <code>file.</code></code>
+						</td>
+					</tr>
+					<tr>
+						<td><code>handlerClassOnly</code></td>
+						<td>If <code>true</code>:
+							<ol>
+								<li>This component will not have any <code>Java</code> generated.</li>
+								<li>The <code>&lt;tag&gt;</code> entry for this component in the <code>taglib.xml</code> will not contain <code>&lt;component-type&gt;</code> or <code>&lt;renderer-type&gt;</code> elements.</li>
+							</ol> Defaults to false.</td>
+					</tr>
+					<tr>
+						<td><code>parentClass</code></td>
+						<td>The class which <code>ComponentBase</code> will extend from. Defaults to the value of <code>builder.faces.component.default.parent.class</code> in <code>generator.properties</code>.</td>
+					</tr>
+					<tr>
+						<td><code>yui</code></td>
+						<td>Boolean flag indicating whether this component is a YUI component.</td>
+					</tr>
+					<tr>
+						<td><code>yuiName</code></td>
+						<td>Specifies the name of the corresponding YUI JavaScript component (<code>yui</code> must be true for this attribute to have any effect) (defaults to the value of the <code>name</code> attribute).</td>
+					</tr>
+					<tr>
+						<td><code>rendererParentClass</code></td>
+						<td>The class which <code>ComponentRenderer</code> will extend from.</td>
+					</tr>
+				</tbody>
+			</table>
+			<p>There are a few more attributes but they should not be necessary.</p>
+			<a name="a_.3Ccomponent.3E_element_children"></a>
+			<h4><span><code>&lt;component&gt;</code> element children</span></h4>
+			<table border="1">
+				<tbody>
+					<tr>
+						<th scope="col">child element</th>
+						<th>description</th>
+					</tr>
+					<tr>
+						<td><code>description</code></td>
+						<td>The description of the attribute.</td>
+					</tr>
+				</tbody>
+			</table>
+			<a name="The_.3Cattribute.3E_element"></a>
+			<h3><span>The <code>&lt;attribute&gt;</code> element</span></h3>
+			<p>The <code>&lt;attribute&gt;</code> element allows the developer to specify several children which will modify the generated code for that attribute.</p>
+			<a name="a_.3Cattribute.3E_element_children"></a>
+			<h4><span><code>&lt;attribute&gt;</code> element children</span></h4>
+			<table border="1">
+				<tbody>
+					<tr>
+						<th scope="col">child element</th>
+						<th>description</th>
+					</tr>
+					<tr>
+						<td><code>name</code></td>
+						<td>The name of the attribute. If the name is the same as an Alloy attribte, then the <code>components-ext.xml</code> xml will be merged with the xml generated from the attribute's json description.</td>
+					</tr>
+					<tr>
+						<td><code>description</code></td>
+						<td>The description of the attribute.</td>
+					</tr>
+					<tr>
+						<td><code>inherited</code></td>
+						<td>Boolean flag indicating whether the attribute is inherited or not. If the attribute is inherited, getters and setters won't be generated.</td>
+					</tr>
+					<tr>
+						<td><code>type</code></td>
+						<td>The type of the attribute. Defaults to <code>java.lang.Object</code>.</td>
+					</tr>
+					<tr>
+						<td><code>required</code></td>
+						<td>Documentation purposes only. Boolean flag indicating whether the attribute must be set by the developer who is using the component. Defaults to <code>false</code>.</td>
+					</tr>
+					<tr>
+						<td><code>defaultValue</code></td>
+						<td>The value of this element will be place in the getter for the attribute. <b>Note:</b> Do not do anything more complex than constant boolean values, integers, etc. If you need to do a more complex default value (for example as string that is returned from a method), use the more performant method of checking if <code>super.getX()</code> returned null, and then applying the default value (like <a class="externallink" rel="nofollow" href="https://github.com/liferay/liferay-faces/blob/master/alloy/src/main/java/com/liferay/faces/alloy/component/inputdate/InputDate.java#L147">this</a>).</td>
+					</tr>
+					<tr>
+						<td><code>generateJava</code></td>
+						<td>Boolean flag indicating whether any Java should be generated for the attribute. Defaults to true. Set this to false if the attribute's Java is unnecessary or harmful, but you need documentation for the attribute to appear in the <code>taglib.xml</code>.</td>
+					</tr>
+					<tr>
+						<td><code>method-signature</code></td>
+						<td>Documentation purposes only. Method signature of your attribute.</td>
+					</tr>
+					<tr>
+						<td><code>yui</code></td>
+						<td>Boolean flag indicating whether the attribute is a YUI JavaScript attribute. If <code>true</code> the attribute will have an encode method generated in the renderer base class.</td>
+					</tr>
+					<tr>
+						<td><code>yuiName</code></td>
+						<td>Indicates that this attribute has a one-to-one correspondence to a YUI attribute of the specified name. If this value is specified, an encode method will be generated in the renderer base class.</td>
+					</tr>
+					<tr>
+						<td><code>yuiType</code></td>
+						<td>The YUI type of the attribute. This effects which encode method is called for the attribute in renderer base. Defaults to Java wrapper type determined by the value in the <code>&lt;type&gt;</code> element.</td>
+					</tr>
+				</tbody>
+			</table>
+			<p>There are a few more child elements but they should not be necessary.</p>
+			<a name="Component_example:"></a>
+			<h3><span>Component example:</span></h3>
+			<pre>&lt;component name="Example"&gt;
+    &lt;description&gt;
+        &lt;![CDATA[Does some stuff]]&gt;
+    &lt;/description&gt;
+    &lt;attributes&gt;
+        &lt;attribute&gt;
+            &lt;description&gt;&lt;![CDATA[The first attribute for &lt;code&gt;alloy:example&lt;/code&gt;.]]&gt;&lt;/description&gt;
+            &lt;name&gt;first&lt;/name&gt;
+            &lt;type&gt;java.lang.String&lt;/type&gt;
+        &lt;/attribute&gt;
+        &lt;attribute&gt;
+            &lt;description&gt;&lt;![CDATA[The second attribute for &lt;code&gt;alloy:example&lt;/code&gt;.]]&gt;&lt;/description&gt;
+            &lt;name&gt;second&lt;/name&gt;	
+            &lt;type&gt;java.lang.String&lt;/type&gt;
+            &lt;generateJava&gt;false&lt;/generateJava&gt;
+        &lt;/attribute&gt;
+        &lt;attribute&gt;
+            &lt;description&gt;&lt;![CDATA[The third attribute for &lt;code&gt;alloy:example&lt;/code&gt;.]]&gt;&lt;/description&gt;
+            &lt;name&gt;third&lt;/name&gt;
+            &lt;type&gt;java.lang.Boolean&lt;/type&gt;
+            &lt;yui&gt;true&lt;/yui&gt;
+            &lt;javaScriptType&gt;String&lt;/javaScriptType&gt;
+        &lt;/attribute&gt;
+        &lt;attribute&gt;
+            &lt;description&gt;&lt;![CDATA[The forth attribute for &lt;code&gt;alloy:example&lt;/code&gt;.]]&gt;&lt;/description&gt;
+            &lt;name&gt;forth&lt;/name&gt;
+            &lt;type&gt;java.lang.Boolean&lt;/type&gt;
+            &lt;yui&gt;true&lt;/yui&gt;
+        &lt;/attribute&gt;
+    &lt;/attributes&gt;
+​&lt;/component&gt;
+</pre>
+		</div>
+	
+</body></html>
